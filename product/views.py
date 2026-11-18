@@ -13,7 +13,7 @@ class CategoryListView(generics.ListCreateAPIView):
 
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Category.objects.all()
+    queryset = Category.objects.annotate(products_count=Count('products'))
     serializer_class = CategorySerializer
 
 

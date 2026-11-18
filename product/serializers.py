@@ -10,17 +10,42 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'name', 'products_count']
 
+    def validate_name(self, value):
+        if not value or not value.strip():
+            raise serializers.ValidationError('Name cannot be empty.')
+        return value.strip()
+
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'title', 'description', 'price', 'category']
 
+    def validate_title(self, value):
+        if not value or not value.strip():
+            raise serializers.ValidationError('Title cannot be empty.')
+        return value.strip()
+
+    def validate_price(self, value):
+        if value <= 0:
+            raise serializers.ValidationError('Price must be greater than 0.')
+        return value
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'text', 'stars', 'product']
+
+    def validate_text(self, value):
+        if not value or not value.strip():
+            raise serializers.ValidationError('Text cannot be empty.')
+        return value.strip()
+
+    def validate_stars(self, value):
+        if value < 1 or value > 5:
+            raise serializers.ValidationError('Stars must be between 1 and 5.')
+        return value
 
 
 class ReviewNestedSerializer(serializers.ModelSerializer):
